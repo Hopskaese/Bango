@@ -12,6 +12,7 @@
 #include "../Item/CItem.h"
 #include "CMonster.h"
 #include "CParty.h"
+#include "Skill/CSkill.h"
 
 #define GEAR_NUM 26
 #define GEAR_VISIBLE_NUM 9
@@ -70,6 +71,9 @@ class CPlayer: public CCharacter
 
 	ItemMap m_mItem;
 	std::mutex m_mxItem;
+
+	SkillMap m_mSkills;
+	std::mutex m_mxSkills;
 
 	static std::map<int, CPlayer*> g_mPlayer;
 	static std::mutex g_mxPlayer;
@@ -203,6 +207,11 @@ public:
 	void IntoInven(CItem* pItem);
 	void OutofInven(CItem* pItem);
 	void EmptyInven();
+
+	//Skill Map
+	void LearnSkill(CSkill* pSkill);
+	void UpgradeSkill(CSkill* pSkill);
+	CSkill* FindSkill(BYTE byIndex);
 
 	// Remember to call m_Access.Release() on found item.
 	CItem* FindItem(WORD wIndex, BYTE byOwn=IFO_ANY);

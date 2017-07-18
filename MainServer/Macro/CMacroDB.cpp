@@ -58,6 +58,16 @@ KeyMap CMacroDB::g_mKey = {
 	{"egg", 		ISC_EGG },
 	{"enchantnecklace", ISC_ENCHANTNECKLAKE },
 
+	// Skill Class
+	{"active", SC_ACTIVE },
+	{"passive", SC_PASSIVE },
+	{"chant", SC_CHANT },
+
+	//Skill Subclass
+	{"once", SSC_ONCE },
+	{"use", SSC_USE },
+	{"etc", SSC_ETC },
+
 	// Player Class
 	{"knight",		PC_KNIGHT },
 	{"mage", 		PC_MAGE },
@@ -278,6 +288,44 @@ bool CMacroDB::LoadInitMonster()
 	return true;
 }
 
+bool CMacroDB::LoadInitSkill()
+{
+	XMLDocument doc;
+
+	if (doc.LoadFile("Config/InitSkill.xml") != XML_SUCCESS) {
+		printf(KRED "Cannot open InitSkill.xml. (%s)\n" KNRM, doc.ErrorName());
+		return false;
+	}
+
+	XMLElement *pRoot = doc.RootElement();
+	if (!pRoot) {
+		printf("Cannot find root element inside InitSkill.xml.\n");
+		return false;
+	}
+
+	XMLElement *pSkillInfo = pRoot->FirstChildElement("skill");
+
+	while (pSkillInfo != NULL)
+	{
+		CSkillInfo *pSkill = new CSkillInfo;
+
+		pSkill->m_byIndex = pSkillInfo->IntAttribute("index");
+		pSkill->m_byClass = FindKey(pSkillInfo->Attribute("class"));
+		pSkill->m_bySubClass = FindKey(pSkillInfo->Attribute("subclass"));
+		pSkill->m_byMaxLevel = pSkillInfo->IntAttribute("maxlevel");
+		pSkill->m_szName = pSkillInfo->Attribute("name");
+
+		DWORD dwKey = (CMacro::MT_SKILL << 16) + pSkill->m_byIndex;
+		g_mMacro[dwKey] = pSkill;
+
+		pSkillInfo = pSkillInfo->NextSiblingElement("skill");
+	}
+
+	return true;
+}
+
+
+//rename function
 void CMacroDB::UnloadInitItem()
 {
 	for (auto& a: g_mMacro)

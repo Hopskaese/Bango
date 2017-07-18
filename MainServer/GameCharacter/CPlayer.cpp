@@ -69,6 +69,35 @@ CPlayer::~CPlayer()
 	}
 }
 
+void CPlayer::LearnSkill(CSkill* pSkill)
+{
+	m_mxSkills.lock();
+
+	if (m_mSkills.find(pSkill->GetIndex()) == m_mSkills.end())
+		m_mSkills[pSkill->GetIndex()] = pSkill;
+
+	m_mxSkills.unlock();
+}
+
+void CPlayer::UpgradeSkill(CSkill* pSkill)
+{
+
+}
+
+CSkill* CPlayer::FindSkill(BYTE byIndex)
+{
+	CSkill *pSkill = NULL;
+
+	m_mxSkills.lock();
+
+	if (m_mSkills.find(byIndex) != m_mSkills.end()) {
+		pSkill = m_mSkills[byIndex];
+		pSkill->m_Access.Grant();
+	}
+
+	m_mxSkills.unlock();
+}
+
 void CPlayer::IntoInven(CItem* pItem)
 {
 	m_mxItem.lock();
@@ -1175,6 +1204,35 @@ void CPlayer::Process(Packet packet)
 				pTarget->m_Access.Release();
 			}
 
+			break;
+		}
+
+		case C2S_LEARNSKILL:
+		{
+			BYTE byIndex;
+			
+			CSocket::ReadPacket(packet.data, "b", &byIndex);
+			CSkill* pSkill = CSkill::CreateSkill(byIndex);
+
+			if (pSkill)
+				LearnSkill(pSkill);
+			/*
+			CSkill* pSkill = new CSkill(byIndex);
+			LeanSkill(pSkill);
+			*/
+
+			break;
+		}
+
+		case C2S_SKILLUP:
+		{
+			BYTE byIndex;
+
+			CSocket::ReadPacket(packet.data, "b", &byIndex);
+			/*
+			CSkill* pSkill = new CSkill(byIndex);
+			UpgradeSkill(pSkill);
+			*/
 			break;
 		}
 	}

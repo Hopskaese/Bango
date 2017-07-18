@@ -10,6 +10,7 @@
 
 #include "CItemInfo.h"
 #include "CMonsterInfo.h"
+#include "CSkillInfo.h"
 
 class CMacroDB
 {
@@ -19,6 +20,7 @@ class CMacroDB
 
 	static bool LoadInitItem();
 	static bool LoadInitMonster();
+	static bool LoadInitSkill();
 
 	// Use only on MainServer close.
 	

@@ -10,6 +10,7 @@ struct CMacro
 		MT_NPC,
 		MT_ITEM,
 		MT_MONSTER,
+		MT_SKILL
 	};
 };
 
