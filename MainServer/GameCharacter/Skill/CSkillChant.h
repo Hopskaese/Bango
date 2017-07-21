@@ -8,7 +8,6 @@ class CSkillChant : public CSkill
 	static SkillNameMap g_mSkillMap;
 public:
 	CSkillChant(CSkillInfo* pMacro);
-	~CSkillChant();
 	static CSkill* CreateSkill(CSkillInfo* m_pMacro);
 };
 

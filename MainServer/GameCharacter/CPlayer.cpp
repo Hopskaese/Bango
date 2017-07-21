@@ -51,6 +51,8 @@ CPlayer::~CPlayer()
 {
 	EmptyInven();
 
+	EmptySkills();
+
 	LeaveParty();
 
 	// Bad idea
@@ -69,19 +71,19 @@ CPlayer::~CPlayer()
 	}
 }
 
-void CPlayer::LearnSkill(CSkill* pSkill)
+bool CPlayer::LearnSkill(CSkill* pSkill)
 {
+	bool rtn = true;
 	m_mxSkills.lock();
 
 	if (m_mSkills.find(pSkill->GetIndex()) == m_mSkills.end())
 		m_mSkills[pSkill->GetIndex()] = pSkill;
+	else
+		rtn = false;
 
 	m_mxSkills.unlock();
-}
 
-void CPlayer::UpgradeSkill(CSkill* pSkill)
-{
-
+	return rtn;
 }
 
 CSkill* CPlayer::FindSkill(BYTE byIndex)
@@ -96,6 +98,8 @@ CSkill* CPlayer::FindSkill(BYTE byIndex)
 	}
 
 	m_mxSkills.unlock();
+
+	return pSkill;
 }
 
 void CPlayer::IntoInven(CItem* pItem)
@@ -127,6 +131,16 @@ void CPlayer::EmptyInven()
 		delete a.second;
 
 	m_mxItem.unlock();
+}
+
+void CPlayer::EmptySkills()
+{
+	m_mxSkills.lock();
+
+	for (auto& a: m_mSkills)
+		delete a.second;
+
+	m_mxSkills.unlock();
 }
 
 CItem* CPlayer::FindItem(WORD wIndex, BYTE byOwnership)
@@ -1214,25 +1228,36 @@ void CPlayer::Process(Packet packet)
 			CSocket::ReadPacket(packet.data, "b", &byIndex);
 			CSkill* pSkill = CSkill::CreateSkill(byIndex);
 
-			if (pSkill)
-				LearnSkill(pSkill);
-			/*
-			CSkill* pSkill = new CSkill(byIndex);
-			LeanSkill(pSkill);
-			*/
+			if (!pSkill)
+				break;
 
+			if (GetSUPoint() > 0)
+			{
+				if (LearnSkill(pSkill))
+					 Write(S2C_SKILLUP, "bb", pSkill->GetIndex(), pSkill->GetLevel());
+			}
+
+			pSkill->m_Access.Release();
 			break;
 		}
 
+		//ToDo add levels requirements for skillup to config
 		case C2S_SKILLUP:
 		{
 			BYTE byIndex;
 
 			CSocket::ReadPacket(packet.data, "b", &byIndex);
-			/*
-			CSkill* pSkill = new CSkill(byIndex);
-			UpgradeSkill(pSkill);
-			*/
+			CSkill* pSkill = FindSkill(byIndex);
+			if (!pSkill)
+				break;
+
+			if (GetSUPoint() > 0 && pSkill->CanSkillUp())
+			{
+				pSkill->SkillUp();
+				Write(S2C_SKILLUP, "bb", pSkill->GetIndex(), pSkill->GetLevel());
+			}
+
+			pSkill->m_Access.Release();
 			break;
 		}
 	}

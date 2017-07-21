@@ -8,7 +8,6 @@ class CSkillActiveOnce : public CSkill
 	static SkillNameMap g_mSkillMap;
 public:
 	CSkillActiveOnce(CSkillInfo* pMacro);
-	~CSkillActiveOnce();
 	static CSkill* CreateSkill(CSkillInfo* m_pMacro);
 };
 

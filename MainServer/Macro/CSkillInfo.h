@@ -14,15 +14,13 @@ struct CSkillInfo : public CMacro
 
 	CSkillInfo() 
 	:
-	m_byIndex(0),
-	m_byClass(0),
-	m_byMaxLevel(0),
-	m_bySubClass(0),
-	m_szName("")
+		m_byIndex(0),
+		m_byClass(0),
+		m_byMaxLevel(0),
+		m_bySubClass(0),
+		m_szName("")
 	{		
 	}
-
 };
-
 
 #endif

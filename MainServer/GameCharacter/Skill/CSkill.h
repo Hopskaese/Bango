@@ -11,22 +11,26 @@
 
 #include "../../Macro/CMacroDB.h"
 
-
 class CSkill 
 {
 protected:
 	CSkillInfo* m_pMacro;
 	BYTE m_byLevel;
+
 	static int FindKey(std::string szKey, std::map<std::string, int>&mSkills);
 public:
 	Access m_Access;
 
 	CSkill(CSkillInfo* pMacro);
-	~CSkill();
+	virtual ~CSkill();
+
+	static CSkill* CreateSkill(BYTE byIndex);
+
 	BYTE GetIndex() const { return m_pMacro->m_byIndex; }
 	BYTE GetLevel() const { return m_byLevel; }
+	void SkillUp() { m_byLevel += 1; }
+	//ToDo check for level requirements.
 	bool CanSkillUp() { return m_pMacro->m_byMaxLevel > m_byLevel; }
-	static CSkill* CreateSkill(BYTE byIndex);
 };
 
 typedef std::map<BYTE, CSkill*>SkillMap;

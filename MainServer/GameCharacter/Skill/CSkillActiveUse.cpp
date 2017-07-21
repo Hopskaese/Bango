@@ -10,22 +10,18 @@ CSkillActiveUse::CSkillActiveUse(CSkillInfo* pMacro): CSkill(pMacro)
 
 }
 
-CSkillActiveUse::~CSkillActiveUse()
-{
-
-}
-
-CSkill* CSkillActiveUse::CreateSkill(CSkillInfo* m_pMacro)
+CSkill* CSkillActiveUse::CreateSkill(CSkillInfo* pMacro)
 {
 	CSkill* pSkill = NULL;
-	int nKey = FindKey(m_pMacro->m_szName, g_mSkillMap);
+	int nKey = FindKey(pMacro->m_szName, g_mSkillMap);
 
 	if (nKey > -1)
 	{
 		switch(nKey)
 		{
 			case S_LIGHTNINGSLASH:
-				pSkill = new CLightningSlash(m_pMacro);
+				pSkill = new CLightningSlash(pMacro);
+				pSkill->m_Access.Grant();
 				break;
 		}
 	}

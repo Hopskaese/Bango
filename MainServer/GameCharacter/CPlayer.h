@@ -209,8 +209,8 @@ public:
 	void EmptyInven();
 
 	//Skill Map
-	void LearnSkill(CSkill* pSkill);
-	void UpgradeSkill(CSkill* pSkill);
+	bool LearnSkill(CSkill* pSkill);
+	void EmptySkills();
 	CSkill* FindSkill(BYTE byIndex);
 
 	// Remember to call m_Access.Release() on found item.

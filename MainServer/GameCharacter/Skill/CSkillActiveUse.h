@@ -16,7 +16,6 @@ protected:
 	BYTE m_byType;
 public:
 	CSkillActiveUse(CSkillInfo* pMacro);
-	~CSkillActiveUse();
 	static CSkill* CreateSkill(CSkillInfo* m_pMacro);
 	virtual int GetAttack() = 0;
 };

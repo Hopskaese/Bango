@@ -89,6 +89,10 @@ bool CMacroDB::Initialize()
 	if (!LoadInitMonster())
 		return false;
 
+	printf("Loading Skills...\n");
+	if (!LoadInitSkill())
+		return false;
+
 	return true;
 }
 
@@ -324,8 +328,6 @@ bool CMacroDB::LoadInitSkill()
 	return true;
 }
 
-
-//rename function
 void CMacroDB::UnloadInitItem()
 {
 	for (auto& a: g_mMacro)

@@ -8,7 +8,6 @@ class CSkillPassive : public CSkill
 	static SkillNameMap g_mSkillMap;
 public:
 	CSkillPassive(CSkillInfo* pMacro);
-	~CSkillPassive();
 	static CSkill* CreateSkill(CSkillInfo* m_pMacro);
 };
 

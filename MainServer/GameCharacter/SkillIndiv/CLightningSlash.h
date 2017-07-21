@@ -7,8 +7,6 @@ class CLightningSlash : public CSkillActiveUse
 {
 public:
 	CLightningSlash(CSkillInfo* pMacro);
-	~CLightningSlash();
-
 	int GetAttack();
 };
 

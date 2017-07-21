@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skilllist>
-	<skill index="1" class="active" subclass="use" maxlevel="10" name="Lightning Slash"></skill>
+	<skill index="3" class="active" subclass="use" maxlevel="10" name="Lightning Slash"></skill>
 </skilllist>

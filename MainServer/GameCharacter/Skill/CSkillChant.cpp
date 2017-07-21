@@ -9,11 +9,6 @@ CSkillChant::CSkillChant(CSkillInfo* pMacro) : CSkill(pMacro)
 
 }
 
-CSkillChant::~CSkillChant()
-{
-
-}
-
 CSkill* CSkillChant::CreateSkill(CSkillInfo* m_pMacro)
 {
 	return NULL;

@@ -12,7 +12,10 @@ CSkill::CSkill(CSkillInfo* pMacro)
 
 CSkill::~CSkill()
 {
-	
+	while (m_Access.IsBusy()) {
+		printf("CSkill::~CSkill: Skill is in use, can't delete! Retrying in 10ms...\n");
+		usleep(10000);
+	}
 }
 
 CSkill* CSkill::CreateSkill(BYTE byIndex)
@@ -22,7 +25,7 @@ CSkill* CSkill::CreateSkill(BYTE byIndex)
 
 	if (!pMacro) {
 		printf(KRED "Wrong skill index: %d\n" KNRM, byIndex);
-		return NULL;
+		return pSkill;
 	}
 
 	switch (pMacro->m_byClass)
@@ -38,12 +41,10 @@ CSkill* CSkill::CreateSkill(BYTE byIndex)
 		case SC_PASSIVE:
 			pSkill = CSkillPassive::CreateSkill(pMacro);
 		break;
-
 		case SC_CHANT:
 			pSkill = CSkillChant::CreateSkill(pMacro);
 		break;
 	}
-
 	return pSkill;
 }
 
